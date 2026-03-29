@@ -1,3 +1,5 @@
+ const express = require("express");
+ const app = express();
  
 
 // app.use("/test", (req, res) => {
@@ -41,8 +43,15 @@ app.get("/admin/getUser", adminAuth, (req, res) => {
   res.send("get user called");
 });
 
-app.get("/admin/deleteUser", adminAuth, (req, res) => {
+app.get("/admin/deleteUser", (req, res) => {
+    throw new Error("zxxccxcxxxxx");
   res.send("delete user called");
 });
+
+app.use("/" , (err, req,res,next)=>{
+    if(err){
+        res.status(400).send("something went wrong");
+    }
+})
 
 app.listen(3000, () => console.log("s/v started successfully"));
