@@ -1,0 +1,7 @@
+$kind: http-request
+url: http://localhost:7777/feed
+method: GET
+body:
+  type: json
+  content: ""
+order: 4000

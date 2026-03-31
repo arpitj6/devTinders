@@ -30,7 +30,6 @@ app.get("/user", async (req, res) => {
 });
 
 //get all users
-
 app.get("/feed", async (req, res) => {
   try {
     const users = await User.find({});
@@ -41,6 +40,16 @@ app.get("/feed", async (req, res) => {
     }
   } catch (err) {
     res.status(400).send("something went wromg");
+  }
+});
+
+//delete user by id
+app.delete("/user", async (req, res) => {
+  try {
+    const user = await User.findByIdAndDelete(req.body?.userId);
+    res.send("user deleted successfully");
+  } catch (err) {
+    res.status(400).send("something went wrong");
   }
 });
 

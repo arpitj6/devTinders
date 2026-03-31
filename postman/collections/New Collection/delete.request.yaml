@@ -1,5 +1,5 @@
 $kind: http-request
-name: user
+name: delete
 url: http://localhost:7777/user
 method: GET
 body:
@@ -9,4 +9,4 @@ body:
     \    \"emailId\":\"rohit@sharma\"\r
 
     }"
-order: 3000
+order: 2828
