@@ -1,0 +1,12 @@
+$kind: http-request
+name: update
+url: http://localhost:7777/user
+method: GET
+body:
+  type: json
+  content: "{\r
+
+    \    \"emailId\":\"rohit@sharma\"\r
+
+    }"
+order: 3296470507717679
