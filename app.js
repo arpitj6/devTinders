@@ -6,6 +6,7 @@ const app = express();
 
 app.use(express.json());
 
+//create user
 app.post("/signup", async (req, res) => {
   const user = new User(req.body);
   try {
@@ -14,6 +15,32 @@ app.post("/signup", async (req, res) => {
   } catch (err) {
     console.log(err);
     res.send.status(500).send("something went wrong");
+  }
+});
+
+// get user by email
+app.get("/user", async (req, res) => {
+  try {
+    const users = await User.find({ emailId: req.body.emailId });
+    res.send(users);
+  } catch (err) {
+    console.log(err);
+    res.status(400).send("something wentw wrong !");
+  }
+});
+
+//get all users
+
+app.get("/feed", async (req, res) => {
+  try {
+    const users = await User.find({});
+    if (users?.length) {
+      res.send(users);
+    } else {
+      res.send("users not found");
+    }
+  } catch (err) {
+    res.status(400).send("something went wromg");
   }
 });
 
