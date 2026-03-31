@@ -1,4 +1,0 @@
-$kind: http-request
-url: http://localhost:3000/arpit
-method: GET
-order: 1070420380390800

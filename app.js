@@ -1,57 +1,27 @@
- const express = require("express");
- const app = express();
- 
+const express = require("express");
+const connectDB = require("./config/database");
+const User = require("./model/user");
 
-// app.use("/test", (req, res) => {
-//   res.send("hello2");
-// });
+const app = express();
 
-// app.get("/arpit", (req, res) => {
-//   res.send("hello3");
-// });
+app.use(express.json());
 
-// app.use("/", (req, res) => {
-//   res.send("hello1");
-// });
-
-// app.get("/user/:userId", (req, res) => {
-//   console.log(req.params);
-//   res.send({ name: "Arpit", lname: "jain" });
-// });
-
-// app.get(
-//   "/user",
-//   (req, res , next) => {
-//     console.log(req.query);
-//     res.send({ name: "Arpit", lname: "jain" });
-//     // next();
-//   },
-//   (req, res) => {
-//     console.log("2 response");
-//     res.send("2nd response");
-//   },
-// );
-
-// app.post("/user", (req, res) => {
-//   //we ccan do anything here like saving of data into database
-
-//   res.send("data savexd successfully");
-// });
-
-const { adminAuth } = require("./middlewares/auth");
-app.get("/admin/getUser", adminAuth, (req, res) => {
-  res.send("get user called");
+app.post("/signup", async (req, res) => {
+  const user = new User(req.body);
+  try {
+    await user.save();
+    res.send("user created succefully");
+  } catch (err) {
+    console.log(err);
+    res.send.status(500).send("something went wrong");
+  }
 });
 
-app.get("/admin/deleteUser", (req, res) => {
-    throw new Error("zxxccxcxxxxx");
-  res.send("delete user called");
-});
-
-app.use("/" , (err, req,res,next)=>{
-    if(err){
-        res.status(400).send("something went wrong");
-    }
-})
-
-app.listen(3000, () => console.log("s/v started successfully"));
+connectDB()
+  .then(() => {
+    console.log("db connected successfully");
+    app.listen(7777, () => console.log("server is running on port 7777"));
+  })
+  .catch((err) => {
+    console.log("db connection failed", err);
+  });

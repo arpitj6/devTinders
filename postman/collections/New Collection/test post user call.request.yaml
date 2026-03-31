@@ -1,4 +1,0 @@
-$kind: http-request
-url: http://localhost:3000/user
-method: POST
-order: 4452284738049739

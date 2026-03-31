@@ -4,12 +4,12 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "dev":"nodemon src/app.js"
-    
+    "dev": "nodemon app.js"
   },
   "author": "arpit",
   "license": "ISC",
   "dependencies": {
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "mongoose": "^9.3.3"
   }
 }
