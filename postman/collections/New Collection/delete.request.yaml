@@ -1,7 +1,7 @@
 $kind: http-request
 name: delete
 url: http://localhost:7777/user
-method: GET
+method: DELETE
 body:
   type: json
   content: "{\r

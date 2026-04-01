@@ -1,12 +1,12 @@
 $kind: http-request
 name: update
-url: http://localhost:7777/user
-method: GET
+url: http://localhost:7777/user/69ca751091df1a107e0d65e8
+method: PATCH
 body:
   type: json
   content: "{\r
 
-    \    \"emailId\":\"rohit@sharma\"\r
+    \    \"emailId\":\"arpitj6@gmail.com\"\r
 
     }"
 order: 3296470507717679

@@ -14,7 +14,7 @@ app.post("/signup", async (req, res) => {
     res.send("user created succefully");
   } catch (err) {
     console.log(err);
-    res.status(500).send("something went wrong"+ err?.message);
+    res.status(500).send("something went wrong" + err?.message);
   }
 });
 
@@ -54,15 +54,38 @@ app.delete("/user", async (req, res) => {
 });
 
 // update user by id
-app.patch("/user", async (req, res) => {
-  try {
-    const user = await User.findByIdAndUpdate(req.body.userId, req.body);
-    res.send("user update successfully!");
-  } catch (err) {
-    console.log(err);
-    res.status(400).send("something went wrong!");
+app.patch(
+  "/user/:userId",
+  async (req, res) => {
+    try {
+      const data = req.body;
+      const ALLOWED_UPDATES = [
+        "photoUrl",
+        "about",
+        "skills",
+        "age",
+        "gender",
+        "emailId",
+        "password"
+      ];
+      const isUpdateAllowed = Object.keys(data).every((key) =>
+        ALLOWED_UPDATES.includes(key),
+      );
+      if (!isUpdateAllowed) {
+        throw new Error("updates not allowed");
+      }
+      if (data?.skills?.length > 10) {
+        throw new Error("skills cant be more than 10");
+      }
+
+      const user = await User.findByIdAndUpdate(req.params?.userId, req.body, {runValidators: true});
+      res.send("user update successfully!");
+    } catch (err) {
+      console.log(err);
+      res.status(400).send("something went wrong!  " + err.message);
+    }
   }
-});
+);
 
 connectDB()
   .then(() => {
