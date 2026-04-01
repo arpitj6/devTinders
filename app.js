@@ -14,7 +14,7 @@ app.post("/signup", async (req, res) => {
     res.send("user created succefully");
   } catch (err) {
     console.log(err);
-    res.send.status(500).send("something went wrong");
+    res.status(500).send("something went wrong"+ err?.message);
   }
 });
 
