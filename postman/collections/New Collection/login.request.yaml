@@ -1,5 +1,5 @@
 $kind: http-request
-name: signup
+name: login
 url: http://localhost:7777/signup
 method: POST
 body:
@@ -15,4 +15,4 @@ body:
     \    \"password\" : \"rohit@123\"\r
 
     }"
-order: 2000
+order: 1280
