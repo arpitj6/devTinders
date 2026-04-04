@@ -1,14 +1,26 @@
-const express = require("express");
-const app = express();
+const jwt = require("jsonwebtoken");
+const User = require("../model/user");
 
-const adminAuth = app.use("/admin", (req, res, next) => {
-  const token = "xyz";
-  const isAuthorized = token === "xyz";
-  if (isAuthorized) {
+const userAuth = async (req, res, next) => {
+  try {
+    const cookies = req.cookies;
+    const { token } = cookies;
+    if (!token) {
+      throw new Error("invalid token..!");
+    }
+    const decodedMessage = await jwt.verify(token, "devTinder@999");
+
+    const { _id } = decodedMessage;
+    const user = await User.findById(_id);
+    if (!user) {
+      throw new Error("user not found");
+    }
+    // attach the user to request
+    req.user = user;
     next();
-  } else {
-    res.status(401).send("unauthorized user");
+  } catch (err) {
+    res.status(400).send("ERROR : " + err.message);
   }
-});
+};
 
-module.exports = {adminAuth}
+module.exports = { userAuth };
