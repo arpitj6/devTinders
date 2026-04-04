@@ -2,10 +2,11 @@ const express = require("express");
 const connectDB = require("./config/database");
 const User = require("./model/user");
 const { validateSignUpData } = require("./validation.js");
-const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
-const {userAuth} = require("./middlewares/auth.js");
+const { userAuth } = require("./middlewares/auth.js");
+const bcrypt = require("bcrypt");
+
 
 const app = express();
 
@@ -119,13 +120,11 @@ app.post("/login", async (req, res) => {
     }
 
     //check for password
-    const isValidPassword = await bcrypt.compare(password, user.password);
+    const isValidPassword = await user.validatePassword(password);
     if (isValidPassword) {
       //create json web token (jwt)
 
-      const token = await jwt.sign({ _id: user._id }, "devTinder@999", {
-        expiresIn: "7d",
-      });
+      const token = await user.getJWT();
       res.cookie("token", token);
       res.send("login successful!");
     } else {
