@@ -1,0 +1,14 @@
+$kind: http-request
+name: logout
+url: http://localhost:7777/login
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"emailId\": \"kagiso@gmail.com\",\r
+
+    \    \"password\": \"Kagiso@123\"\r
+
+    }"
+order: 4500905839482751
