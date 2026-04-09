@@ -1,0 +1,11 @@
+$kind: http-request
+name: request/review/:status/:requestId
+url: http://localhost:7777/request/review/:status/:requestId
+method: POST
+pathVariables:
+  status: ""
+  requestId: ""
+body:
+  type: json
+  content: ""
+order: 8000

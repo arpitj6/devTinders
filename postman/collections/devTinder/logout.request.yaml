@@ -1,6 +1,6 @@
 $kind: http-request
-name: login
-url: http://localhost:7777/login
+name: logout
+url: http://localhost:7777/logout
 method: POST
 body:
   type: json
@@ -11,4 +11,4 @@ body:
     \    \"password\": \"Kagiso@123\"\r
 
     }"
-order: 4408395775724329
+order: 3000

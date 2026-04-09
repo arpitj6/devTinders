@@ -1,5 +1,5 @@
 $kind: http-request
-name: logout
+name: login
 url: http://localhost:7777/login
 method: POST
 body:
@@ -11,4 +11,4 @@ body:
     \    \"password\": \"Kagiso@123\"\r
 
     }"
-order: 4441713677954407
+order: 2000

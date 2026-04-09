@@ -1,0 +1,13 @@
+$kind: http-request
+name: request/send/:status/:toUserId
+url: http://localhost:7777/request/send/:status/:toUserId
+method: POST
+pathVariables:
+  - key: status
+    value: interested
+  - key: toUserId
+    value: 69d39adeb8c75036b50d135a
+body:
+  type: json
+  content: ""
+order: 9000

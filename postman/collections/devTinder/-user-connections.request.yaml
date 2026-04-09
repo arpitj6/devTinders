@@ -1,8 +1,8 @@
 $kind: http-request
-name: profile/view
+name: /user/connections
 url: http://localhost:7777/profile/view
 method: GET
 body:
   type: json
   content: ""
-order: 4478893251823282
+order: 3123597667798567
