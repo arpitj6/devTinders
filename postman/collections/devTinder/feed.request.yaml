@@ -1,7 +1,8 @@
 $kind: http-request
+name: feed
 url: http://localhost:7777/feed
 method: GET
 body:
   type: json
   content: ""
-order: 7000
+order: 10958

@@ -10,4 +10,4 @@ pathVariables:
 body:
   type: json
   content: ""
-order: 9000
+order: 8000
