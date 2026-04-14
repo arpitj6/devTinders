@@ -12,6 +12,7 @@ const validateSignUpData = (req) => {
 };
 
 const validateEditData = (req) => {
+  console.log('validate edit data'+req)
   const ALLOWED_FIELDS = [
     "firstName",
     "lastName",

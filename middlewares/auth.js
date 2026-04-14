@@ -6,14 +6,14 @@ const userAuth = async (req, res, next) => {
     const cookies = req.cookies;
     const { token } = cookies;
     if (!token) {
-      throw new Error("invalid token..!");
+      return res.status(401).send("Unauthorized: No token provided");
     }
     const decodedMessage = await jwt.verify(token, "devTinder@999");
 
     const { _id } = decodedMessage;
     const user = await User.findById(_id);
     if (!user) {
-      throw new Error("user not found");
+      return res.status(404).json({ message: "User not found" });
     }
     // attach the user to request
     req.user = user;

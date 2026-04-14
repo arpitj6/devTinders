@@ -5,6 +5,7 @@ const { userAuth } = require("../middlewares/auth.js");
 const { validateEditData } = require("../utils/validation");
 const { validateNewPassword } = require("../utils/validation");
 const bcrypt = require("bcrypt");
+const User = require("../model/user");
 
 //get user profile by id (usig jwt)
 profileRouter.get("/profile/view", userAuth, async (req, res) => {
@@ -16,8 +17,9 @@ profileRouter.get("/profile/view", userAuth, async (req, res) => {
   }
 });
 
-profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
+profileRouter.post("/profile/edit", userAuth, async (req, res) => {
   try {
+    console.log("hit");
     if (!validateEditData(req)) {
       throw new Error("invalid request fields");
     }
@@ -30,13 +32,18 @@ profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
   }
 });
 
-profileRouter.patch("/profile/password", userAuth, async (req, res) => {
+profileRouter.post("/profile/password", async (req, res) => {
   try {
-    //match password from db
-    const loggedInUser = req.user;
+    // check email
+
+    const user = await User.findOne({ emailId: req.body.email });
+    if (!user) {
+      throw new Error("user not found!");
+    }
+
     const isPasswordValid = await bcrypt.compare(
       req.body.oldPassword,
-      loggedInUser.password,
+      user.password,
     );
     if (!isPasswordValid) {
       throw new Error("please enter correct old password!");
@@ -45,10 +52,9 @@ profileRouter.patch("/profile/password", userAuth, async (req, res) => {
       throw new Error("please enter strong password");
     }
     //if correct update the new password
-
-    loggedInUser["password"] = await bcrypt.hash(req.body.newPassword, 10);
-    await loggedInUser.save();
-    res.json({ message: "password updated successfully!", data: loggedInUser });
+    user["password"] = await bcrypt.hash(req.body.newPassword, 10);
+    await user.save();
+    res.json({ message: "password updated successfully!", data: user });
   } catch (err) {
     res.status(400).send("ERROR : " + err.message);
   }
