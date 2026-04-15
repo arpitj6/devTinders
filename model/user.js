@@ -32,6 +32,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       validate(value) {
+        if (value?.startsWith("$2")) {
+          return;
+        }
+
         if (!validators.isStrongPassword(value)) {
           throw new Error("please enter strong password : " + value);
         }
@@ -54,6 +58,7 @@ const userSchema = new mongoose.Schema(
     about: {
       type: String,
       default: "this is the default about content",
+      maxLength: 400,
     },
     photoUrl: {
       type: String,
@@ -88,6 +93,13 @@ userSchema.methods.getJWT = function () {
     expiresIn: "7d",
   });
   return token;
+};
+
+userSchema.methods.getPublicProfile = function () {
+  const user = this.toObject();
+  delete user.password;
+  delete user.__v;
+  return user;
 };
 
 module.exports = mongoose.model("User", userSchema);

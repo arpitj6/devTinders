@@ -21,7 +21,7 @@ userRouter.get("/user/requests/recieved", userAuth, async (req, res) => {
       data: connectionRequests,
     });
   } catch (err) {
-    res.status(400).json({ message: "ERROR : " + err.message });
+    res.status(400).json({ message: err.message });
   }
 });
 
@@ -46,7 +46,7 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
     });
     res.status(200).json({ message: "Data fetched successfully", data });
   } catch (err) {
-    res.status(400).json({ message: "ERROR : " + err.message });
+    res.status(400).json({ message: err.message });
   }
 });
 
@@ -84,7 +84,7 @@ userRouter.get("/feed", userAuth, async (req, res) => {
       .limit(limit);
     res.status(200).json({ data: users });
   } catch (err) {
-    res.status(400).json({ message: "ERROR: " + err.message });
+    res.status(400).json({ message: err.message });
   }
 });
 

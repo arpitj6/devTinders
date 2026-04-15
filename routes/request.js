@@ -15,8 +15,7 @@ requestRouter.post(
       const { status, toUserId } = req.params;
       // validation 1
       if (!SEND_ALLOWED_STATUS.includes(status)) {
-        res.status(404).json({ message: "invalid status - " + status });
-        return;
+        return res.status(404).json({ message: "invalid status - " + status });
       }
 
       //   validation2
@@ -42,7 +41,7 @@ requestRouter.post(
         toUserId,
         status,
       });
-      const data = await connectionRequest.save();
+      await connectionRequest.save();
       res.json({
         message: `${req.user.firstName} is ${status} in ${toUser.firstName}`,
       });
@@ -78,7 +77,7 @@ requestRouter.post(
           .json({ message: "connection request not found" });
       }
       connectionRequest.status = status;
-      const data = await connectionRequest.save();
+      await connectionRequest.save();
       res.json({ message: " connection request " + status });
     } catch (err) {
       res.status(400).json({ message: "ERROR : " + err.message });
