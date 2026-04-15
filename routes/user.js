@@ -4,7 +4,9 @@ const { userAuth } = require("../middlewares/auth");
 const ConnectionRequest = require("../model/connectionRequest");
 const User = require("../model/user");
 
-const USER_SAFE_DATA = "firstName lastName age gender photoUrl about skills";
+const USER_SAFE_DATA = Object.freeze(
+  "firstName lastName age gender photoUrl about skills",
+);
 
 userRouter.get("/user/requests/recieved", userAuth, async (req, res) => {
   try {
@@ -14,8 +16,8 @@ userRouter.get("/user/requests/recieved", userAuth, async (req, res) => {
       status: "interested",
     }).populate("fromUserId", USER_SAFE_DATA);
 
-    res.json({
-      message: "data fetched successfully!",
+    res.status(200).json({
+      message: "Data fetched successfully",
       data: connectionRequests,
     });
   } catch (err) {
@@ -42,7 +44,7 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
       }
       return row.fromUserId;
     });
-    res.json({ message: "data fetched successfully!", data });
+    res.status(200).json({ message: "Data fetched successfully", data });
   } catch (err) {
     res.status(400).json({ message: "ERROR : " + err.message });
   }
@@ -80,7 +82,7 @@ userRouter.get("/feed", userAuth, async (req, res) => {
       .select(USER_SAFE_DATA)
       .skip(skip)
       .limit(limit);
-    res.json({ data: users });
+    res.status(200).json({ data: users });
   } catch (err) {
     res.status(400).json({ message: "ERROR: " + err.message });
   }

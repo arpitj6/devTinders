@@ -24,10 +24,16 @@ authRouter.post("/signup", async (req, res) => {
 
     const savedUser = await user.save();
     const token = await savedUser.getJWT();
-    res.cookie("token", token);
-    res.json({ message: "user created successfully", data: savedUser });
+    const existingUser = await User.findOne({ emailId });
+
+    if (existingUser) {
+      return res.status(400).send("User already exists");
+    }
+    res.cookie("token", token, { httpOnly: true, secure: true });
+    res
+      .status(201)
+      .json({ message: "user created successfully", data: savedUser });
   } catch (err) {
-    console.log(err);
     res.status(500).send("ERROR : " + err?.message);
   }
 });
@@ -37,32 +43,35 @@ authRouter.post("/login", async (req, res) => {
   try {
     const { emailId, password } = req.body;
 
+    if (!emailId || !password) {
+      return res.status(400).send("Email and password required");
+    }
+
     // check if email id is predent or not
     const user = await User.findOne({ emailId: emailId });
 
     if (!user) {
-      throw new Error("invalid credentials!");
+      return res.status(401).send("Invalid credentials");
     }
 
     //check for password
     const isValidPassword = await user.validatePassword(password);
     if (isValidPassword) {
       //create json web token (jwt)
-
       const token = await user.getJWT();
-      res.cookie("token", token);
+      res.cookie("token", token, { httpOnly: true, secure: true });
       res.send(user);
     } else {
-      throw new Error("invalid credentials!");
+      return res.status(401).send("Invalid credentials");
     }
   } catch (err) {
-    res.status(400).send("ERROR : " + err.message);
+    res.status(400).send("ERROR : " + err?.message);
   }
 });
 
 authRouter.post("/logout", async (req, res) => {
   res.cookie("token", null, { expires: new Date(Date.now()) });
-  res.send("logout successfull!");
+  res.status(200).json({ message: "user logged out successfully" });
 });
 
 module.exports = authRouter;

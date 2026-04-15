@@ -17,16 +17,19 @@ profileRouter.get("/profile/view", userAuth, async (req, res) => {
   }
 });
 
+// EDIT USER PROFILE
 profileRouter.post("/profile/edit", userAuth, async (req, res) => {
   try {
-    console.log("hit");
     if (!validateEditData(req)) {
-      throw new Error("invalid request fields");
+      res.status(400).send("invalid request fields");
+      return;
     }
     const loggedInUser = req.user;
     Object.keys(req.body).forEach((key) => (loggedInUser[key] = req.body[key]));
     await loggedInUser.save();
-    res.json({ message: "user edit successful!!", data: loggedInUser });
+    res
+      .status(200)
+      .json({ message: "user edit successful!!", data: loggedInUser });
   } catch (err) {
     res.status(400).send("ERROR : " + err.message);
   }
@@ -35,10 +38,10 @@ profileRouter.post("/profile/edit", userAuth, async (req, res) => {
 profileRouter.post("/profile/password", async (req, res) => {
   try {
     // check email
-
     const user = await User.findOne({ emailId: req.body.email });
     if (!user) {
-      throw new Error("user not found!");
+      res.status(404).json({ message: "user not found!" });
+      return;
     }
 
     const isPasswordValid = await bcrypt.compare(
@@ -46,15 +49,19 @@ profileRouter.post("/profile/password", async (req, res) => {
       user.password,
     );
     if (!isPasswordValid) {
-      throw new Error("please enter correct old password!");
+      res.status(400).json({ message: "please enter correct old password!" });
+      return;
     }
     if (!validateNewPassword(req.body.newPassword)) {
-      throw new Error("please enter strong password");
+      res.status(400).json({ message: "please enter strong password" });
+      return;
     }
     //if correct update the new password
     user["password"] = await bcrypt.hash(req.body.newPassword, 10);
     await user.save();
-    res.json({ message: "password updated successfully!", data: user });
+    res
+      .status(200)
+      .json({ message: "password updated successfully!", data: user });
   } catch (err) {
     res.status(400).send("ERROR : " + err.message);
   }

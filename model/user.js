@@ -10,9 +10,11 @@ const userSchema = new mongoose.Schema(
       minLength: 3,
       maxLength: 20,
       required: true,
+      trim: true,
     },
     lastName: {
       type: String,
+      trim: true,
     },
     emailId: {
       type: String,
@@ -58,7 +60,7 @@ const userSchema = new mongoose.Schema(
       default:
         "https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3407.jpg?semt=ais_hybrid&w=740&q=80",
       validate(value) {
-        if (!validators.isURL(value)) {
+        if (value && !validators.isURL(value)) {
           throw new Error("please ented valid url- " + value);
         }
       },
@@ -80,9 +82,9 @@ userSchema.methods.validatePassword = async function (passwordInputByUser) {
   return isPasswordValid;
 };
 
-userSchema.methods.getJWT = async function () {
+userSchema.methods.getJWT = function () {
   const user = this;
-  const token = await jwt.sign({ _id: user._id }, "devTinder@999", {
+  const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
     expiresIn: "7d",
   });
   return token;

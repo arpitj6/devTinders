@@ -1,38 +1,37 @@
 const validator = require("validator");
-
+const ALLOWED_FIELDS = [
+  "firstName",
+  "lastName",
+  "age",
+  "gender",
+  "skills",
+  "about",
+  "photoUrl",
+];
 const validateSignUpData = (req) => {
-  const { firstName, lastName, emailId, password } = req.body;
-  if (!firstName || !lastName) {
+  const { firstName, lastName, emailId, password } = req?.body;
+  if (!firstName?.trim() || !lastName?.trim()) {
     throw new Error("first name and last name is required");
-  } else if (!validator.isEmail(emailId)) {
+  }
+
+  if (!validator.isEmail(emailId)) {
     throw new Error("please enter a valid email id");
-  } else if (!validator.isStrongPassword(password)) {
+  }
+
+  if (!validator.isStrongPassword(password)) {
     throw new Error("please enter a strong password");
   }
 };
 
 const validateEditData = (req) => {
-  console.log('validate edit data'+req)
-  const ALLOWED_FIELDS = [
-    "firstName",
-    "lastName",
-    "age",
-    "gender",
-    "skills",
-    "about",
-    "photoUrl",
-  ];
-  const isValidRequest = Object.keys(req.body).every((key) =>
+  const isValidRequest = Object.keys(req?.body).every((key) =>
     ALLOWED_FIELDS.includes(key),
   );
   return isValidRequest;
 };
 
 const validateNewPassword = (password) => {
-  if (!validator.isStrongPassword(password)) {
-    return false;
-  }
-  return true;
+  return validator.isStrongPassword(password);
 };
 
 module.exports = { validateSignUpData, validateEditData, validateNewPassword };
