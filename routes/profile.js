@@ -51,7 +51,6 @@ profileRouter.post("/profile/edit", userAuth, async (req, res) => {
   }
 });
 
-//forgot password
 profileRouter.post("/profile/password", async (req, res) => {
   try {
     const emailId = normalizeEmail(req.body.email || "");
